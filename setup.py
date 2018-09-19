@@ -13,7 +13,7 @@ with codecs.open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="dvb.datascience",  # Required
-    version='0.12.dev0',
+    version='0.12',
     description="Some helpers for our data scientist",  # Required
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional (see note above)

@@ -1,6 +1,6 @@
 # CHANGES
 
-## 0.12 (unreleased)
+0.12 (2018-09-19)
 
 - Public Release
 
