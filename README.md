@@ -1,6 +1,6 @@
 # dvb.datascience
 
-a python [data science](https://en.wikipedia.org/wiki/Data_science) pipeline package
+A python [data science](https://en.wikipedia.org/wiki/Data_science) pipeline package.
 
 ![Travis (.org)](https://img.shields.io/travis/devolksbank/dvb.datascience.svg)
 
