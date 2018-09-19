@@ -1,0 +1,10 @@
+*.pyc
+*.ipynb*
+*.csv
+*cache*/
+.vscode/
+*.egg-info/
+tmp/
+*.idea/
+.coverage
+*.json

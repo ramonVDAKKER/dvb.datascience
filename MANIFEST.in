@@ -1,0 +1,10 @@
+recursive-include main_directory *
+recursive-include docs *
+recursive-include test *.csv
+recursive-include test *.py
+include *
+global-exclude *.pyc
+
+# added by check_manifest.py
+recursive-include test *.csv
+recursive-include test *.py
