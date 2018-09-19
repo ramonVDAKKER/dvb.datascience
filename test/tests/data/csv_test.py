@@ -1,4 +1,5 @@
 import unittest
+import pathlib
 
 import pandas as pd
 
@@ -38,7 +39,6 @@ class TestCsv(unittest.TestCase):
         df = p.get_pipe_output("read")["df"]
         self.assertTrue(pd.DataFrame.equals(df, self.train_data))
 
-
     def test_read_init_params(self):
         p = self.pipeline
         p.addPipe("read", ds.data.CSVDataImportPipe())
@@ -58,6 +58,7 @@ class TestCsv(unittest.TestCase):
         pass
 
     def test_write(self):
+        pathlib.Path("./tmp").mkdir(parents=True, exist_ok=True)
         output_file = "tmp/unittest-csv_test-test_write_output.csv"
 
         p = self.pipeline
