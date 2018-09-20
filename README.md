@@ -176,8 +176,9 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 - **Marc Rijken** - _Initial work_ - [mrijken](https://github.com/mrijken)
 - **Wouter Poncin** - _Maintenance_ - [wpbs](https://github.com/wpbs)
 - **Daan Knoope** - _Contributor_ - [daanknoope](https://github.com/daanknoope)
+- **Christopher Huijting** - _Contributor_ - [chuijting](https://github.com/chuijting)
 
-See also the list of [contributors](https://github.com/devolksbank/dvb.datascience/CONTRIBUTORS) who participated in this project.
+See also the list of [contributors](https://github.com/devolksbank/dvb.datascience/blob/master/CONTRIBUTORS) who participated in this project.
 
 ## License
 
