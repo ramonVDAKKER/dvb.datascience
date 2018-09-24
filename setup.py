@@ -9,7 +9,7 @@ with codecs.open(path.join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="dvb.datascience",  # Required
-    version='0.13.dev0',
+    version="0.13.dev0",
     description="Some helpers for our data scientist",  # Required
     long_description=long_description,  # Optional
     long_description_content_type="text/markdown",  # Optional (see note above)
@@ -43,19 +43,16 @@ setup(
         "blockdiag",
         "pyensae",
         "TPOT",
-        "sphinx", 
-        "m2r",
-        "nbsphinx",
     ],  # Optional
     extras_require={  # Optional
         "dev": ["zest.releaser[recommended]"],
         "test": ["coverage", "pytest", "pytest-cov", "pexpect"],
         "release": ["zest.releaser"],
         "teradata": ["teradata"],
+        "docs": ["sphinx", "m2r", "nbsphinx"],
     },
     package_data={},  # Optional
     data_files=[],  # Optional
     entry_points={},  # Optional
     project_urls={},  # Optional
 )
-
