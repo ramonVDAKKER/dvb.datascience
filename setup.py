@@ -49,7 +49,7 @@ setup(
         "test": ["coverage", "pytest", "pytest-cov", "pexpect"],
         "release": ["zest.releaser"],
         "teradata": ["teradata"],
-        "docs": ["sphinx", "m2r", "nbsphinx", "jupyter_client"],
+        "docs": ["sphinx", "m2r", "nbsphinx", "jupyter_client", "nbconvert==5.3.1"],
     },
     package_data={},  # Optional
     data_files=[],  # Optional
