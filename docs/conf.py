@@ -167,6 +167,7 @@ texinfo_documents = [
     )
 ]
 
+nbsphinx_allow_errors = True
 
 # -- Extension configuration -------------------------------------------------
 
