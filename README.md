@@ -1,6 +1,6 @@
 # dvb.datascience
 
-A python [data science](https://en.wikipedia.org/wiki/Data_science) pipeline package.
+A python [data science](https://en.wikipedia.org/wiki/Data_science) pipeline package. Full documentation can be found on [ReadTheDocs](https://dvbdatascience.readthedocs.io/en/latest/)
 
 ![Travis](https://travis-ci.org/devolksbank/dvb.datascience.svg?branch=master)
 
