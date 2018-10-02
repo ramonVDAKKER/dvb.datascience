@@ -14,6 +14,7 @@
 #
 import os
 import sys
+import m2r
 
 # -- Project information -----------------------------------------------------
 
