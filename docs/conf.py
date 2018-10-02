@@ -14,6 +14,7 @@
 #
 import os
 import sys
+import m2r
 
 # -- Project information -----------------------------------------------------
 
@@ -167,6 +168,7 @@ texinfo_documents = [
     )
 ]
 
+nbsphinx_allow_errors = True
 
 # -- Extension configuration -------------------------------------------------
 
