@@ -24,9 +24,7 @@ class SKLearnWrapper(PipeBase):
 
     s = None  # type: SKLearnBase
 
-    fit_attributes = [
-        ('s', 'pickle', 'pickle'),
-    ]
+    fit_attributes = [("s", "pickle", "pickle")]
 
     def __init__(self, cls, **kwargs) -> None:
         super().__init__()

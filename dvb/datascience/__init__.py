@@ -21,7 +21,9 @@ import numpy as np
 import random as rn
 
 
-def load_module(name: str, disable_warnings: bool = True, random_seed:Optional[int]=1122) -> Any:
+def load_module(
+    name: str, disable_warnings: bool = True, random_seed: Optional[int] = 1122
+) -> Any:
     """
     Convenience function for running an experiment. This function reloads the
     experiment when it is already loaded, so any changes in the [.. missing word ..] of that
@@ -60,6 +62,5 @@ def load_module(name: str, disable_warnings: bool = True, random_seed:Optional[i
 
 
 def run_module(name: str, disable_warnings: bool = True) -> Any:
-    warnings.warn("run_module is replaced by load_module",
-                  PendingDeprecationWarning)
+    warnings.warn("run_module is replaced by load_module", PendingDeprecationWarning)
     return load_module(name, disable_warnings)

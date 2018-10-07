@@ -364,22 +364,20 @@ class Pipeline:
                 return True
         return False
 
-    def fit_transform_try(
-        self,*args, **kwargs
-    ):
+    def fit_transform_try(self, *args, **kwargs):
         try:
             self.fit_transform(*args, **kwargs)
         except:
             import traceback
+
             traceback.print_exc()
 
-    def transform_try(
-        self,*args, **kwargs
-    ):
+    def transform_try(self, *args, **kwargs):
         try:
             self.transform(*args, **kwargs)
         except:
             import traceback
+
             traceback.print_exc()
 
     def transform(
@@ -427,7 +425,9 @@ class Pipeline:
             fit_params = {}
 
         progress_label = ipywidgets.HTML()
-        progress_bar = ipywidgets.FloatProgress(min=0, max=len(self.pipes), description="Progress:")
+        progress_bar = ipywidgets.FloatProgress(
+            min=0, max=len(self.pipes), description="Progress:"
+        )
         progress_box = ipywidgets.HBox(children=[progress_bar, progress_label])
         display(progress_box)
 
@@ -523,5 +523,5 @@ class Pipeline:
         for pipe_name, pipe in self.pipes.items():
             state[pipe_name] = pipe.save()
 
-        with open(file_path, 'w') as f:
+        with open(file_path, "w") as f:
             json.dump(state, f)

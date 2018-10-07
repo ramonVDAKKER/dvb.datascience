@@ -15,9 +15,7 @@ class LabelBinarizerPipe(PipeBase):
     input_keys = ("df",)
     output_keys = ("df", "df_metadata")
 
-    fit_attributes = [
-        ('lb', 'pickle', 'pickle')
-    ]
+    fit_attributes = [("lb", "pickle", "pickle")]
 
     lb = None  # type: Dict[str, LabelBinarizer]
 

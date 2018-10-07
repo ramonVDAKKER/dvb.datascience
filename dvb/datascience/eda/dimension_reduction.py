@@ -57,8 +57,7 @@ class DimensionReductionPlots(AnalyticsBase):
             self.scatterPlot(Xt, y, method)
 
         # ISOMAP
-        Xt = manifold.Isomap(
-            self.n_neighbors, self.n_components).fit_transform(X)
+        Xt = manifold.Isomap(self.n_neighbors, self.n_components).fit_transform(X)
         self.scatterPlot(Xt, y, "isomap")
 
         # MDS
