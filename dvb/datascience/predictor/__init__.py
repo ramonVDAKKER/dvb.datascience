@@ -22,7 +22,7 @@ class SklearnClassifier(ClassificationPipeBase):
 
     threshold = None
 
-    fit_attributes = [("clf", "pickle", "pickle")]
+    fit_attributes = [("clf", "pickle", "pickle"), ("threshold", None, None)]
 
     def __init__(self, clf, **kwargs):
         super().__init__()
