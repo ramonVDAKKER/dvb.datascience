@@ -7,7 +7,7 @@ A python [data science](https://en.wikipedia.org/wiki/Data_science) pipeline pac
 At [de Volksbank](https://www.devolksbank.nl/), our data scientists used to write a lot of overhead code for every experiment from scratch. To help them focus on the more exciting and value added parts of their jobs, we created this package.
 Using this package you can easily create and reuse your pipeline code (consisting of often used data transformations and modeling steps) in experiments. 
 
-![Sample Project Gif](https://dvbdatascience-test.readthedocs.io/en/latest/_images/GIF_Sample_Project.gif)
+![Sample Project Gif](https://dvbdatascience.readthedocs.io/en/latest/_images/GIF_Sample_Project.gif)
 
 This package has (among others) the following features:
 
@@ -35,7 +35,7 @@ For a more extensive overview of all the features, see the docs directory.
 
 ### Prerequisites
 
-This package requires [Python3](https://www.python.org/) and has been tested/developed using python 3.6
+This package requires [Python3](https://www.python.org/) and has been tested/developed using python 3.6 and 3.7.
 
 ### Installing
 
@@ -50,13 +50,13 @@ pip install dvb.datascience
 (in the checkout directory): For installing the checkouts repo for developing of dvb.datascience:
 
 ```bash
-pipenv install --dev
+pip install -e .
 ```
 
 For using dvb.datascience in your project:
 
 ```bash
-pipenv install dvb.datascience
+pip install dvb.datascience
 ```
 
 #### Development - Anaconda
