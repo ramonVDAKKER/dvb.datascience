@@ -3,6 +3,7 @@
 A python [data science](https://en.wikipedia.org/wiki/Data_science) pipeline package. Full documentation can be found on [ReadTheDocs](https://dvbdatascience.readthedocs.io/en/latest/)
 
 ![Travis](https://travis-ci.org/devolksbank/dvb.datascience.svg?branch=master)
+[![codecov](https://codecov.io/gh/devolksbank/dvb.datascience/branch/master/graph/badge.svg)](https://codecov.io/gh/devolksbank/dvb.datascience)
 
 At [de Volksbank](https://www.devolksbank.nl/), our data scientists used to write a lot of overhead code for every experiment from scratch. To help them focus on the more exciting and value added parts of their jobs, we created this package.
 Using this package you can easily create and reuse your pipeline code (consisting of often used data transformations and modeling steps) in experiments. 
