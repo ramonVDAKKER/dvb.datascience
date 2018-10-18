@@ -97,6 +97,11 @@ class Pipeline:
     >>> pipeline.fit()
 
     >>> pipeline.transform()
+
+    The constructor of Pipeline also accepts a `store_output` argument. When the argument
+    is omitted or is equal to 'memory', all output is kept in memory.  When that
+    argument is "file" all output will be saved to disk and released from memory when
+    the pipe does not need the output.
     """
 
     pipes = None  # type: Dict
