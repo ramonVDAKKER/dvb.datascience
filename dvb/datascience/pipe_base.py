@@ -3,7 +3,7 @@ import codecs
 import logging
 import pickle
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple, Sequence, Optional, Union
+from typing import Any, Dict, List, Tuple, Sequence, Optional, Union, Callable
 
 import matplotlib.pyplot as plt
 

@@ -1,9 +1,12 @@
+import abc
 import json
 import logging
 import re
+import pickle
+import pathlib
 from collections import defaultdict
 from enum import Enum
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union, Any
 
 import ipywidgets
 import matplotlib.pyplot as plt
@@ -20,6 +23,63 @@ class Status(Enum):
     PROCESSING = 2
     FINISHED = 3
 
+
+class TransformOutputsBase(metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
+    def save_pipe_output(self, pipe_name: str, transform_nr: int, output: Dict[str, Any]) ->None:
+        """save the pipe output"""
+
+    @abc.abstractmethod
+    def load_pipe_output(self, pipe_name: str, transform_nr: int) ->  Dict[str, Any]:
+        """load the pipe outputs, returns None when the output does not exists"""
+
+    @abc.abstractmethod
+    def contains_pipe(self, pipe_name: str, transform_nr: int) -> bool:
+        """returns True when the pipe with pipe_name has stored his output.
+        For some implementations this is more efficient as checking whether load_pipe_output is not None
+        """
+
+class TransformOutputsMemory(TransformOutputsBase):
+
+    # outputs = None
+
+    def __init__(self):
+        self.outputs: Dict[Tuple[str, int], Dict[str, Any]] = {}
+
+    def save_pipe_output(self, pipe_name: str, transform_nr: int, output: Dict[str, Any]) ->None:
+        self.outputs[(pipe_name, transform_nr)] = output
+
+    def load_pipe_output(self, pipe_name: str, transform_nr: int) -> Dict[str, Any]:
+        return self.outputs[(pipe_name, transform_nr)]
+
+    def contains_pipe(self, pipe_name: str, transform_nr: int) -> bool:
+        return (pipe_name, transform_nr) in self.outputs
+
+class TransformOutputsFile(TransformOutputsBase):
+
+    def __init__(self, directory='transform_output', file_pattern='{pipe_name}_{transform_nr}.pkl'):
+        self.directory = pathlib.Path(directory)
+        self.file_pattern = file_pattern
+
+        self.directory.mkdir(parents=True, exist_ok=True)
+
+    def save_pipe_output(self, pipe_name: str, transform_nr: int,  output: Dict[str, Any]) ->None:
+        filename = self.file_pattern.format(pipe_name=pipe_name, transform_nr= transform_nr)
+        with open(self.directory / filename, 'wb') as f:
+            pickle.dump(output, f)
+
+    def load_pipe_output(self, pipe_name: str, transform_nr: int) -> Dict[str, Any]:
+        filename = self.file_pattern.format(pipe_name=pipe_name, transform_nr= transform_nr)
+        if not (self.directory / filename).exists():
+            raise KeyError("No pipe %s with transform %s is available" % (pipe_name, transform_nr))
+
+        with open(self.directory / filename, 'rb') as f:
+            return pickle.load(f)
+
+    def contains_pipe(self, pipe_name: str, transform_nr: int) -> bool:
+        filename = self.file_pattern.format(pipe_name=pipe_name, transform_nr= transform_nr)
+        return (self.directory / filename).exists()
 
 class Pipeline:
 
@@ -45,10 +105,13 @@ class Pipeline:
 
     current_transform_nr = -1  # type: int
     transform_status = None  # type: Dict[int, Status]
-    transform_outputs = None  # type: Dict[int, Dict[str, Dict]]
+    transform_outputs = None  # type: TransformOutputsBase
 
-    def __init__(self):
+    def __init__(self,
+            store_output: str = 'memory', # store the pipe output in 'memory', 'file', None (no not store it in the pipe)
+    ) -> None:
         logger.info("Initiate pipeline")
+        self.store_output = store_output
         self.pipes = {}
         self.input_connectors = defaultdict(list)
         """A mapping between an input pipe name and related connection tuples (output_name, output_key, input_name, input_key)"""
@@ -64,7 +127,10 @@ class Pipeline:
     def reset_fit(self):
         self.current_transform_nr = -1
         self.transform_status = {}
-        self.transform_outputs = defaultdict(lambda: defaultdict(dict))
+        if self.store_output == 'memory':
+            self.transform_outputs = TransformOutputsMemory()
+        elif self.store_output == 'file':
+            self.transform_outputs = TransformOutputsFile()
 
     @staticmethod
     def is_valid_name(name):
@@ -260,7 +326,7 @@ class Pipeline:
         processable_pipes = []
         for pipe_name, pipe in self.pipes.items():
             # check if pipe is already processed
-            if pipe_name in self.transform_outputs[self.current_transform_nr]:
+            if self.transform_outputs.contains_pipe(pipe_name, self.current_transform_nr):
                 continue
 
             if len(pipe.input_keys) == 0:
@@ -271,7 +337,7 @@ class Pipeline:
             # check if input is present. ie check if all needed outputs for the input are present
             if not all(
                 [
-                    output_name in self.transform_outputs[self.current_transform_nr]
+                    self.transform_outputs.contains_pipe(output_name, self.current_transform_nr)
                     for output_name, _, _, _ in self.input_connectors[pipe_name]
                 ]
             ):
@@ -293,9 +359,9 @@ class Pipeline:
         """
         r = {}
         for output_name, output_key, _, input_key in self.input_connectors[name]:
-            if output_name not in self.transform_outputs[self.current_transform_nr]:
+            if not self.transform_outputs.contains_pipe(output_name, self.current_transform_nr):
                 return None
-            value = self.transform_outputs[self.current_transform_nr][output_name]
+            value = self.transform_outputs.load_pipe_output(output_name, self.current_transform_nr)
             if output_key not in value:
                 return None
             r[input_key] = value[output_key]
@@ -311,7 +377,7 @@ class Pipeline:
         if transform_nr is None:
             transform_nr = self.current_transform_nr
 
-        return self.transform_outputs[transform_nr][name]
+        return self.transform_outputs.load_pipe_output(name, self.current_transform_nr)
 
     @staticmethod
     def get_params(params: Dict, key: str, metadata: Dict = None) -> Dict:
@@ -367,7 +433,7 @@ class Pipeline:
     def fit_transform_try(self, *args, **kwargs):
         try:
             self.fit_transform(*args, **kwargs)
-        except:
+        except Exception:
             import traceback
 
             traceback.print_exc()
@@ -375,7 +441,7 @@ class Pipeline:
     def transform_try(self, *args, **kwargs):
         try:
             self.transform(*args, **kwargs)
-        except:
+        except Exception:
             import traceback
 
             traceback.print_exc()
@@ -417,7 +483,7 @@ class Pipeline:
         # when present, the input argument contains the input for the pipeline which will be stored
         # as a pipe with '' as name, so other pipes can get that as input
         if data:
-            self.transform_outputs[self.current_transform_nr][""] = data
+            self.transform_outputs.save_pipe_output("", self.current_transform_nr, data)
 
         if transform_params is None:
             transform_params = {}
@@ -495,7 +561,7 @@ class Pipeline:
                         % (pipe.name, list(output.keys()), pipe.output_keys)
                     )
 
-                self.transform_outputs[self.current_transform_nr][pipe.name] = output
+                self.transform_outputs.save_pipe_output(pipe.name, self.current_transform_nr, output)
                 progress_bar.value += 1
         progress_label.value = "finished"
         progress_bar.bar_style = "success"
