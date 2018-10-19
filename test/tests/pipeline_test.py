@@ -19,7 +19,7 @@ class TestPipes(unittest.TestCase):
     def testChainPipes(self):
         p = ds.Pipeline()
         p.addPipe("data", ds.data.SampleData("iris")).addPipe(
-            "split", ds.transform.TrainTestSplit(test_size=0.3), [("data", "df", "df")]
+            "split", ds.transform.RandomTrainTestSplit(test_size=0.3), [("data", "df", "df")]
         )
 
         self.assertEqual(len(p.pipes), 2)
@@ -40,7 +40,7 @@ class TestPipes(unittest.TestCase):
         p = ds.Pipeline()
         p.addPipe("data", ds.data.SampleData("iris"))
         p.addPipe(
-            "split", ds.transform.TrainTestSplit(test_size=0.3), [("data", "df", "df")]
+            "split", ds.transform.RandomTrainTestSplit(test_size=0.3), [("data", "df", "df")]
         )
 
         p.fit_transform(
@@ -57,11 +57,11 @@ class TestPipes(unittest.TestCase):
         )
         self.assertEqual(len(p.get_pipe_output("split")["df"]), 45)
 
-    def testPipelineOutputInFile(self):
-        p = ds.Pipeline(store_output="file")
+    def testPipelineOutputToFile(self):
+        p = ds.Pipeline(output_store=ds.OutputStoreFile())
         p.addPipe("data", ds.data.SampleData("iris"))
         p.addPipe(
-            "split", ds.transform.TrainTestSplit(test_size=0.3), [("data", "df", "df")]
+            "split", ds.transform.RandomTrainTestSplit(test_size=0.3), [("data", "df", "df")]
         )
 
         p.fit_transform(

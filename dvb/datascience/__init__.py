@@ -14,7 +14,7 @@ from . import score
 from . import transform
 from .classification_pipe_base import ClassificationPipeBase
 from .pipe_base import PipeBase
-from .pipeline import Pipeline
+from .pipeline import Pipeline, OutputStoreFile, OutputStoreMemory
 from .sub_pipe_base import SubPipelineBase
 
 import numpy as np
