@@ -3,9 +3,6 @@ import json
 import tempfile
 import shutil
 import os.path
-import pickle
-
-import pytest
 
 import dvb.datascience as ds
 
@@ -22,7 +19,7 @@ class TestPipes(unittest.TestCase):
     def testChainPipes(self):
         p = ds.Pipeline()
         p.addPipe("data", ds.data.SampleData("iris")).addPipe(
-            "split", ds.transform.TrainTestSplit(test_size=0.3), [("data", "df", "df")]
+            "split", ds.transform.RandomTrainTestSplit(test_size=0.3), [("data", "df", "df")]
         )
 
         self.assertEqual(len(p.pipes), 2)
@@ -43,7 +40,28 @@ class TestPipes(unittest.TestCase):
         p = ds.Pipeline()
         p.addPipe("data", ds.data.SampleData("iris"))
         p.addPipe(
-            "split", ds.transform.TrainTestSplit(test_size=0.3), [("data", "df", "df")]
+            "split", ds.transform.RandomTrainTestSplit(test_size=0.3), [("data", "df", "df")]
+        )
+
+        p.fit_transform(
+            transform_params={
+                "split": {"split": ds.transform.RandomTrainTestSplit.TRAIN}
+            }
+        )
+        self.assertEqual(len(p.get_pipe_output("split")["df"]), 105)
+
+        p.transform(
+            transform_params={
+                "split": {"split": ds.transform.RandomTrainTestSplit.TEST}
+            }
+        )
+        self.assertEqual(len(p.get_pipe_output("split")["df"]), 45)
+
+    def testPipelineOutputToFile(self):
+        p = ds.Pipeline(output_store=ds.OutputStoreFile())
+        p.addPipe("data", ds.data.SampleData("iris"))
+        p.addPipe(
+            "split", ds.transform.RandomTrainTestSplit(test_size=0.3), [("data", "df", "df")]
         )
 
         p.fit_transform(
@@ -112,7 +130,7 @@ class TestPipes(unittest.TestCase):
 
         class TestSubPipline(ds.sub_pipe_base.SubPipelineBase):
 
-            input_keys = ("df", )
+            input_keys = ("df",)
             output_keys = ("df",)
 
             def __init__(self):
@@ -124,7 +142,7 @@ class TestPipes(unittest.TestCase):
                     self.pipeline.addPipe(
                         "filter_" + featuresSimplifiedNames[feature],
                         ds.transform.FilterFeatures([feature]),
-                        [("pass_data", "df", "df")]
+                        [("pass_data", "df", "df")],
                     )
                     self.pipeline.addPipe(
                         "outlier_" + featuresSimplifiedNames[feature],

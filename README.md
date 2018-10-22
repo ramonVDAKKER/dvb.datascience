@@ -6,7 +6,7 @@ A python [data science](https://en.wikipedia.org/wiki/Data_science) pipeline pac
 [![codecov](https://codecov.io/gh/devolksbank/dvb.datascience/branch/master/graph/badge.svg)](https://codecov.io/gh/devolksbank/dvb.datascience)
 
 At [de Volksbank](https://www.devolksbank.nl/), our data scientists used to write a lot of overhead code for every experiment from scratch. To help them focus on the more exciting and value added parts of their jobs, we created this package.
-Using this package you can easily create and reuse your pipeline code (consisting of often used data transformations and modeling steps) in experiments. 
+Using this package you can easily create and reuse your pipeline code (consisting of often used data transformations and modeling steps) in experiments.
 
 ![Sample Project Gif](https://dvbdatascience.readthedocs.io/en/latest/_images/GIF_Sample_Project.gif)
 
@@ -15,7 +15,7 @@ This package has (among others) the following features:
 - Make easy-to-follow model pipelines of fits and transforms ([what exactly is a pipeline?](https://stackoverflow.com/questions/33091376/python-what-is-exactly-sklearn-pipeline-pipeline))
 - Make a graph of the pipeline
 - Output graphics, data, metadata, etc from the pipeline steps
-- Data preprocessing such as filtering feature and observation outliers 
+- Data preprocessing such as filtering feature and observation outliers
 - Adding and merging intermediate dataframes
 - Every pipe stores all intermediate output, so the output can be inspected later on
 - Transforms can store the outputs of previous runs, so the data from different transforms can be compared into one graph
@@ -27,7 +27,7 @@ This package has (among others) the following features:
 
 ## Scope
 
-This package was developed specifically for fast prototyping with relatively small datasets on a single machine. By allowing the intermediate output of each pipeline step to be stored, this package might underperform for bigger datasets (100,000 rows or more). 
+This package was developed specifically for fast prototyping with relatively small datasets on a single machine. By allowing the intermediate output of each pipeline step to be stored, this package might underperform for bigger datasets (100,000 rows or more).
 
 ## Getting Started
 
@@ -99,7 +99,7 @@ import dvb.datascience as ds
 
 p = ds.Pipeline()
 p.addPipe('read', ds.data.SampleData('iris'))
-p.addPipe('split', ds.transform.TrainTestSplit(test_size=0.3), [("read", "df", "df")])
+p.addPipe('split', ds.transform.RandomTrainTestSplit(test_size=0.3), [("read", "df", "df")])
 p.addPipe('boxplot', ds.eda.BoxPlot(), [("split", "df", "df")])
 p.fit_transform(transform_params={'split': {'train': True}})
 ```
@@ -194,7 +194,3 @@ For any questions please don't hesitate to contact us at [tc@devolksbank.nl](mai
 - Adding support for multiclass classification problems
 - Adding support for regression problems
 - Adding support for Apache Spark ML
-
-
-
-

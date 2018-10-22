@@ -8,7 +8,7 @@ def run():
     p.addPipe("read", ds.data.SampleData(dataset_name="breast_cancer"))
     p.addPipe(
         "split",
-        ds.transform.TrainTestSplit(test_size=0.3, random_state=42),
+        ds.transform.RandomTrainTestSplit(test_size=0.3, random_state=42),
         [("read", "df", "df")],
     )
     p.addPipe(
